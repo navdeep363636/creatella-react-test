@@ -6,7 +6,8 @@ export default class Products extends React.Component {
 		this.state = {
 			apidata: [],
 			sortBy: '',
-			page: 1
+			page: 1,
+			isLoading:true
 		};
 		this.handleScroll = this.handleScroll.bind(this);
 		this.fetchProductData = this.fetchProductData.bind(this);
@@ -22,17 +23,20 @@ export default class Products extends React.Component {
 	handleScroll() {
 		const container = document.getElementById('container');
 		const scrollHeight = container.offsetTop + container.clientHeight - window.outerHeight;
-		if (window.scrollY >= scrollHeight && scrollHeight >0)  {
-			setTimeout(() => this.fetchProductData(this.state.page + 1), 3000);
+	if (window.scrollY >= scrollHeight && scrollHeight >0 && this.state.page <10 && !this.state.isLoading)  {
+			this.setState({isLoading:true})
+			setTimeout(() =>{	 this.fetchProductData(this.state.page + 1)},3000)
 		}
+	
 	}
 
 	fetchProductData(page) {
+	
 		fetch(`http://localhost:3002/api/products?_page=${page}&_limit=20`)
 			.then((data) => data.json())
 			.then((json) => {
 				const apidata = this.state.apidata.concat(json);
-				this.setState({ apidata, page });
+				this.setState({ apidata, page,isLoading:false });
 			})
 			.catch((err) => console.log(err));
 	}
@@ -57,8 +61,9 @@ export default class Products extends React.Component {
 		}
 	};
 	render() {
-		const { apidata } = this.state;
-		console.log(apidata);
+		const { apidata,page,isLoading } = this.state;
+		console.log(apidata)
+console.log(page)
 		return (
 			<React.Fragment>
 				<label htmlFor="sort">Sort By:</label>
@@ -67,6 +72,7 @@ export default class Products extends React.Component {
 					<option value="size">Size</option>
 					<option value="price">Price</option>
 				</select>
+				
 				<div id="container" className="container">
 					{apidata.length > 0 &&
 						apidata.map((data, index) => {
@@ -96,7 +102,8 @@ export default class Products extends React.Component {
 								</React.Fragment>
 							);
 						})}
-					<div id="loading">Loading items....</div>
+					{isLoading ?<div  className="greenText"><p>Loading items....</p></div>:null}
+					{page === 10? <div className="greenText" ><p> end of catalogue </p></div>:null}
 				</div>
 			</React.Fragment>
 		);
