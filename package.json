@@ -1,17 +1,25 @@
 {
   "name": "products-grid",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.1",
   "description": "Build a grid of product items and ads",
   "main": "server/index.js",
-  "scripts": {
-    "start": "json-server server/index.js --routes server/routes.json --middlewares server/handle-delay.js server/handle-ads.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.1",
+    "cool-ascii-faces": "^1.3.4",
+    "json-server": "^0.9.6"
   },
   "author": "",
   "license": "",
-  "dependencies": {
-    "cool-ascii-faces": "^1.3.4",
-    "json-server": "^0.9.6"
-  }
+  "scripts": {
+    "start-react": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "start": "json-server server/index.js --port 3002 --routes server/routes.json --middlewares server/handle-delay.js server/handle-ads.js",
+    "test-server": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {}
 }
